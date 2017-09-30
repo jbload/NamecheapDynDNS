@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using CommandLine;
-using Newtonsoft.Json;
 
 namespace NamecheapDynDNS
 {
@@ -32,10 +31,12 @@ namespace NamecheapDynDNS
         private Timer Timer { get; }
         
         private IList<NamecheapDomain> Domains { get; set; }
-
-        private string CurrentIPAddress { get; set; }
-
+        
         private bool IsUpdating { get; set; }
+
+        private DateTime? LastLogTimeOfUpdatesWithoutIPChange { get; set; }
+
+        private int UnloggedUpdatesWithoutIPChange { get; set; }
 
         protected override async void OnStart(string[] args)
         {
@@ -67,39 +68,43 @@ namespace NamecheapDynDNS
         private IList<NamecheapDomain> GetDomains(CommandLineOptions options)
         {
             IList<NamecheapDomain> domains = null;
+            
+            var configFilePath = GetFullPath(options.DomainConfigFile);
 
-            if(string.IsNullOrWhiteSpace(options.DomainConfigFile))
+            if(File.Exists(configFilePath))
             {
-                var message = string.Format(
-                    "A domain config file was not specified using the -{0} or -{1} options.",
-                    CommandLineOptions.DomainConfigFileShortName,
-                    CommandLineOptions.DomainConfigFileLongName);
-                EventLog.WriteEntry(message, EventLogEntryType.Error);
+                try
+                {
+                    domains = NamecheapDomain.FromJsonFile(configFilePath);
+                }
+                catch(Exception ex)
+                {
+                    EventLog.WriteEntry(ex.ToString(), EventLogEntryType.Error);
+                }
             }
             else
             {
-                var configFilePath = Path.GetFullPath(options.DomainConfigFile);
-
-                if(File.Exists(configFilePath))
-                {
-                    try
-                    {
-                        domains = NamecheapDomain.FromJsonFile(configFilePath);
-                    }
-                    catch(Exception ex)
-                    {
-                        EventLog.WriteEntry(ex.ToString(), EventLogEntryType.Error);
-                    }
-                }
-                else
-                {
-                    EventLog.WriteEntry($"Domain config file does not exist: {configFilePath}");
-                }
+                EventLog.WriteEntry($"Domain config file does not exist: {configFilePath}");
             }
 
             return domains ?? new List<NamecheapDomain>();
         }
 
+        private string GetFullPath(string path)
+        {
+            string fullPath;
+
+            if(Path.IsPathRooted(path))
+            {
+                fullPath = Path.GetFullPath(path);
+            }
+            else
+            {
+                fullPath = Path.Combine(AppContext.BaseDirectory, path);
+            }
+
+            return fullPath;
+        }
         private async Task UpdateIPAsync()
         {
             lock(this)
@@ -114,7 +119,31 @@ namespace NamecheapDynDNS
 
             try
             {
-                await DynDNSClient.UpdateIPIfChanged(Domains);
+                var updated = await DynDNSClient.UpdateIPIfChanged(Domains);
+
+                if(updated)
+                {
+                    UnloggedUpdatesWithoutIPChange = 0;
+                    LastLogTimeOfUpdatesWithoutIPChange = null;
+                    EventLog.WriteEntry(
+                        $"Updated IP Address for {Domains.Count} domain(s).", 
+                        EventLogEntryType.SuccessAudit);
+                }
+                else
+                {
+                    UnloggedUpdatesWithoutIPChange++;
+
+                    var elapsed = DateTime.Now - (LastLogTimeOfUpdatesWithoutIPChange ?? DateTime.Now);
+
+                    if(elapsed.TotalHours >= 1.0)
+                    {
+                        var message = string.Format(
+                            "Update was not needed because the IP address has not changed. Attempts: {n0}",
+                            UnloggedUpdatesWithoutIPChange);
+                        EventLog.WriteEntry(message, EventLogEntryType.Information);
+                        UnloggedUpdatesWithoutIPChange = 0;
+                    }
+                }
             }
             finally
             {
