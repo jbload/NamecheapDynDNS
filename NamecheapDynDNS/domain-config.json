@@ -1,0 +1,10 @@
+﻿[
+    {
+        "domainName": "yourdomain.com",
+        "dynamicDNSPassword": "yourdyndnspassword_for_yourdomain.com",
+        "hosts": [
+            "@",
+            "www"
+        ]
+    }
+]
