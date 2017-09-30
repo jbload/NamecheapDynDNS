@@ -31,7 +31,7 @@
             // 
             // NamecheapDynDNSService
             // 
-            this.ServiceName = "Service1";
+            this.ServiceName = "NamecheapDynDNSService";
 
         }
 
