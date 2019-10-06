@@ -38,15 +38,17 @@ namespace NamecheapDynDNS
 
         private int UnloggedUpdatesWithoutIPChange { get; set; }
 
-        protected override async void OnStart(string[] args)
+        protected override void OnStart(string[] args)
         {
-            var options = new CommandLineOptions();
-            Parser.Default.ParseArguments(args, options);
+            Parser.Default.ParseArguments<CommandLineOptions>(args)
+                .WithParsed(
+                    async options =>
+                    {
+                        Timer.Interval = GetUpdateInterval(options);
+                        Domains = GetDomains(options);
 
-            Timer.Interval = GetUpdateInterval(options);
-            Domains = GetDomains(options);
-
-            await UpdateIPAsync();
+                        await UpdateIPAsync();
+                    });
         }
 
         protected override void OnStop()
@@ -126,7 +128,7 @@ namespace NamecheapDynDNS
                     UnloggedUpdatesWithoutIPChange = 0;
                     LastLogTimeOfUpdatesWithoutIPChange = null;
                     EventLog.WriteEntry(
-                        $"Updated IP Address for {Domains.Count} domain(s).", 
+                        $"Updated IP Address for {Domains.Count} domain(s).",
                         EventLogEntryType.SuccessAudit);
                 }
                 else
@@ -137,13 +139,16 @@ namespace NamecheapDynDNS
 
                     if(elapsed.TotalHours >= 1.0)
                     {
-                        var message = string.Format(
-                            "Update was not needed because the IP address has not changed. Attempts: {n0}",
-                            UnloggedUpdatesWithoutIPChange);
+                        var message =
+                            $"Update was not needed because the IP address has not changed. Attempts: {UnloggedUpdatesWithoutIPChange:N}";
                         EventLog.WriteEntry(message, EventLogEntryType.Information);
                         UnloggedUpdatesWithoutIPChange = 0;
                     }
                 }
+            }
+            catch(Exception ex)
+            {
+                EventLog.WriteEntry(ex.Message, EventLogEntryType.Error);
             }
             finally
             {

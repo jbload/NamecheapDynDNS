@@ -1,16 +1,12 @@
 ﻿using System;
+using CommandLine;
 using Xunit;
 
 namespace NamecheapDynDNS.Tests
 {
     public class CommandLineOptionsTests
     {
-        public CommandLineOptionsTests()
-        {
-            Options = new CommandLineOptions();    
-        }
-
-        private CommandLineOptions Options { get; }
+        private CommandLineOptions Options { get; set; }
 
         [Fact]
         public void DomainConfigFile_HasDefaultValue_WhenArgNotProvided()
@@ -77,7 +73,9 @@ namespace NamecheapDynDNS.Tests
 
         private bool ParseArgs(params string[] args)
         {
-            return CommandLine.Parser.Default.ParseArguments(args, Options);
+            return Parser.Default.ParseArguments<CommandLineOptions>(args)
+                .WithParsed(options => Options = options)
+                .Tag == ParserResultType.Parsed;
         }
     }
 }

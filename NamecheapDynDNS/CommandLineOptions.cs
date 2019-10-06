@@ -16,10 +16,10 @@ namespace NamecheapDynDNS
         public const string UpdateIntervalLongName = "update";
         public const string UpdateIntervalDefault = "15";
 
-        [Option(DomainConfigFileShortName, DomainConfigFileLongName, DefaultValue = DomainConfigFileDefault)]
+        [Option(DomainConfigFileShortName, DomainConfigFileLongName, Default = DomainConfigFileDefault)]
         public string DomainConfigFile { get; set; }
 
-        [Option(UpdateIntervalShortName, UpdateIntervalLongName, DefaultValue = UpdateIntervalDefault)]
+        [Option(UpdateIntervalShortName, UpdateIntervalLongName, Default = UpdateIntervalDefault)]
         public string UpdateInterval { get; set; }
     }
 }
