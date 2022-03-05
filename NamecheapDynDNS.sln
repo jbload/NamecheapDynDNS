@@ -1,17 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NamecheapDynDNS", "NamecheapDynDNS\NamecheapDynDNS.csproj", "{857E6D16-C7E2-49A2-8866-109AC25C28DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NamecheapDynDNS", "NamecheapDynDNS\NamecheapDynDNS.csproj", "{2CD7CE32-2FEE-48F7-8A8D-2A4ACA04C8D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NamecheapDynDNS.Tests", "NamecheapDynDNS.Tests\NamecheapDynDNS.Tests.csproj", "{158A2FC1-10E6-4171-926E-58B3FD39D401}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AB765B1C-DF24-4321-9CBC-245B2B500E61}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{23A4B2E4-01D7-4BBC-BBB0-53B3C831C125}"
 	ProjectSection(SolutionItems) = preProject
-		.\.gitignore = .\.gitignore
-		.\LICENSE = .\LICENSE
-		.\README.md = .\README.md
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global
@@ -20,19 +18,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{857E6D16-C7E2-49A2-8866-109AC25C28DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{857E6D16-C7E2-49A2-8866-109AC25C28DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{857E6D16-C7E2-49A2-8866-109AC25C28DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{857E6D16-C7E2-49A2-8866-109AC25C28DB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{158A2FC1-10E6-4171-926E-58B3FD39D401}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{158A2FC1-10E6-4171-926E-58B3FD39D401}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{158A2FC1-10E6-4171-926E-58B3FD39D401}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{158A2FC1-10E6-4171-926E-58B3FD39D401}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CD7CE32-2FEE-48F7-8A8D-2A4ACA04C8D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CD7CE32-2FEE-48F7-8A8D-2A4ACA04C8D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CD7CE32-2FEE-48F7-8A8D-2A4ACA04C8D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CD7CE32-2FEE-48F7-8A8D-2A4ACA04C8D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {BE5328B7-C21B-4852-B422-123829646E49}
+		SolutionGuid = {90C3AEDF-8DC1-427C-B722-0305CEE73AA9}
 	EndGlobalSection
 EndGlobal

@@ -288,4 +288,4 @@ __pycache__/
 *.xsd.cs
 
 # Custom
-domain-test-config.json
+namecheap-settings.json

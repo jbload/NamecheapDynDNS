@@ -1,0 +1,13 @@
+{
+  "BaseAddress": "https://dynamicdns.park-your-domain.com/",
+  "Domains": [
+    {
+      "DomainName": "yourdomain.com",
+      "Password": "yourdyndnspassword_for_yourdomain.com",
+      "Hosts": [
+        "@",
+        "www"
+      ]
+    }
+  ]
+}
